@@ -7,6 +7,7 @@ Test cases can be run with the following:
 """
 import os
 import logging
+from datetime import date
 from unittest import TestCase
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
@@ -135,5 +136,21 @@ class TestAccountService(TestCase):
         for account in accounts_list:
             self.assertTrue(account['id'] in account_ids)
 
-
-
+    def test_read_an_account(self):
+        """It should return an account"""
+        accounts = self._create_accounts(5)
+        account = accounts[0]
+        account_id = account.id
+        response = self.client.get(f"{BASE_URL}/{account_id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        account_json = response.get_json()
+        account_found = Account.find(account_id)
+        self.assertEqual(int(account_json['id']), account_found.id)
+        self.assertEqual(account_json['name'], account_found.name)
+        self.assertEqual(account_json['email'], account_found.email)
+        self.assertEqual(account_json['address'], account_found.address)
+        self.assertEqual(account_json['phone_number'], account_found.phone_number)
+        self.assertEqual(account_json['date_joined'], str(account_found.date_joined))
+        # Test non-existent account
+        response = self.client.get(f"{BASE_URL}/100")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
