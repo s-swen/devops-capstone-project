@@ -7,7 +7,6 @@ Test cases can be run with the following:
 """
 import os
 import logging
-from datetime import date
 from unittest import TestCase
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
@@ -136,7 +135,7 @@ class TestAccountService(TestCase):
         accounts_list = response.get_json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(accounts_list), 5)
-        account_ids = [account.id for account in accounts] 
+        account_ids = [account.id for account in accounts]
         for account in accounts_list:
             self.assertTrue(account['id'] in account_ids)
 
@@ -190,8 +189,7 @@ class TestAccountService(TestCase):
         # delete it using endpoint
         response = self.client.delete(f"{BASE_URL}/{account_id}")
         # assert status 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-  
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)  
 
     def test_method_not_allowed(self):
         """It should return method not allowed"""
