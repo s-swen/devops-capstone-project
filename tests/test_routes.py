@@ -188,8 +188,8 @@ class TestAccountService(TestCase):
         account_id = response.get_json()['id']
         # delete it using endpoint
         response = self.client.delete(f"{BASE_URL}/{account_id}")
-        # assert status 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)  
+        # assert status
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_method_not_allowed(self):
         """It should return method not allowed"""
